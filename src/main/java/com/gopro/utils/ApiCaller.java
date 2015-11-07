@@ -27,7 +27,7 @@ public class ApiCaller {
             
             StringBuilder sb = new StringBuilder("http://api.goeuro.com/api/v2/position/suggest/en/");
             sb.append(cityName);
-            LOGGER.debug("Loading api by city: {}", cityName);
+//            LOGGER.debug("Loading api by city: {}", cityName);
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();

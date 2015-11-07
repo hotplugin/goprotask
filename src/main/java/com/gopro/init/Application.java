@@ -11,27 +11,47 @@ import java.util.Scanner;
 public class Application {
 
     public static void main(String[] args) {
-        System.out.println("Hello! Enter Germany's any city Name: ");
-        String path = ClassLoader.getSystemClassLoader().getClass().getResource("csv/a.txt").getPath();
-        System.out.println(path);
-//        String cityName;
-//        Scanner scanIn = new Scanner(System.in);
-//        cityName = scanIn.nextLine();
-//        scanIn.close();
-//        if (cityName.isEmpty()) {
-//            System.out.println("Oops! you forgot to actually enter a city name !");
-//        } else {
-//            ApiCaller apicaller = new ApiCaller();
-//            List<LocationPojo> locations = apicaller.generate(cityName.trim());
-//            if (locations != null && !locations.isEmpty()) {
-//                CsvCreator csv = new CsvCreator();
-//                String absolutePath = "csv";
-//                System.out.println("absolutepath "+absolutePath);
-//                csv.writeCsvFile(absolutePath, locations);
-//                System.out.println("Congratulations! Locations.csv saved in the RESOURCES folder!");
-//            }
-//        }
+        outMsg("Hello! Welcome.");
+        processCity();
 
+    }
+
+    public static void processCity() {
+        outMsg("Enter Germany's any city Name: ");
+        String cityName;
+        Scanner scanIn = new Scanner(System.in);
+        cityName = scanIn.nextLine();
+        if (cityName.isEmpty()) {
+            outMsg("Oops! you forgot to actually enter a city name !");
+        } else {
+            ApiCaller apicaller = new ApiCaller();
+            List<LocationPojo> locations = apicaller.generate(cityName.trim());
+            String path = ClassLoader.getSystemClassLoader().getClass().getResource("/csv/").getPath();
+            String savepath = path.concat(cityName).concat(".csv");
+
+            if (locations != null && !locations.isEmpty()) {
+                CsvCreator csv = new CsvCreator();
+                csv.writeCsvFile(savepath, locations);
+                outMsg("Congratulations! File Saved to :  " + savepath);
+            } else {
+                outMsg("Could not locate such city! :( ");
+                outMsg("Try again? Y or N");
+                String choseOption;
+                choseOption = scanIn.nextLine();
+
+                if (choseOption.equalsIgnoreCase("Y")) {
+                    processCity();
+                } else {
+                    outMsg("BYE!");
+                    scanIn.close();
+                }
+            }
+        }
+
+    }
+
+    public static void outMsg(String msg) {
+        System.out.println(msg);
     }
 
 }
